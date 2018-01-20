@@ -1,0 +1,144 @@
+﻿@using UniversityProject.Models
+
+@{
+    ViewBag.Title = "EnrollCourse";
+}
+
+<h2 class="col-md-4 col-md-offset-4">Enroll In a Course</h2>
+<style>
+    label.error {
+        color: red;
+    }
+    h2 {
+        background-color: aqua;
+    }
+    form {
+        background-color: chartreuse;
+    }
+</style>
+<br/>
+<form method="POST" id="myForm" class="col-md-4 col-md-offset-4">
+    @ViewBag.Messages
+    <table>
+        <tr>
+            <td>
+                <label for="studentId">Student Reg. No.</label>
+            </td>
+            <td>
+                <select name="studentId" id="studentId">
+                    <option value="">Select...</option>
+                    @foreach (Student student in ViewBag.Students)
+                    {
+                        <option value="@student.Id">@student.RegistrationNumber</option>
+                    }
+                </select>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td><label for="Name">Name</label></td>
+            <td>
+                <input type="text" id="Name" name="Name" readonly value="" />
+            </td>
+        </tr>
+
+        <tr>
+            <td><label for="Email">Email</label></td>
+            <td>
+                <input type="text" id="Email" name="Email" readonly value="" />
+            </td>
+        </tr>
+        <tr>
+            <td><label for="Code">Department</label></td>
+            <td>
+                <input type="text" id="Code" name="Code" readonly value="" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="CourseCodeId">Course</label>
+            </td>
+            <td>
+                <select name="CourseCodeId" id="CourseCodeId">
+                    <option value="">Select...</option>
+
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td><label for="EnrollmentDate">Date</label></td>
+            <td>
+                <input type="text" id="EnrollmentDate" name="EnrollmentDate" readonly value="" />
+            </td>
+        </tr>
+        @*<tr>
+
+            <td><input type="submit" value="Enroll" class="btn btn-default col-md-4 col-md-offset-4" /></td>
+        </tr>*@
+    </table>
+    <br/>
+    <input type="submit" value="Enroll" class="btn btn-default col-md-4 col-md-offset-4" />
+</form>
+
+@section scripts
+{
+
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#EnrollmentDate").datepicker();
+            $("#myForm").validate({
+                rules: {
+                    studentId: "required",
+                    CourseCodeId: "required",
+                 
+                    EnrollmentDate: "required"
+                   
+                },
+                messages: {
+                    studentId: "Please Select Student Reg. no",
+
+                    CourseCodeId: "Please Select Course",
+                   
+                    EnrollmentDate: "Please Pick Date"
+                   
+                }
+            });
+            $("#studentId").change(function () {
+
+                var stdId = $("#studentId").val();
+                $("#CourseCodeId").empty();
+                $('#Name').val('');
+                $('#Email').val('');
+                $('#Code').val('');
+                var json = { studentId: stdId };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetStudentsById", "University")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                        //alert(data);
+                        $("#CourseCodeId").append('<option value='+""+' >' + "Select" + '</option>');
+                        $.each(data, function (key, value) {
+                            //alert(key);
+                            $('#Name').val(value.Name);
+                            $("#Email").val(value.Email);
+                            $("#Code").val(value.Code);
+                            $("#CourseCodeId").append('<option value=' + value.CourseCodeId + '>' + value.CourseCode + '</option>');
+
+                        });
+                    }
+                });
+            });
+
+        });
+
+    </script>
+}
+

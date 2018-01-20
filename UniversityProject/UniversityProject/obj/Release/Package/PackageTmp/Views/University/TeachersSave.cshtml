@@ -1,0 +1,167 @@
+﻿@using UniversityProject.Models
+@{
+    ViewBag.Title = "TeachersSave";
+    List<Department> departments = ViewBag.Departments;
+    List<Designation> designations = ViewBag.Designation;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TeachersSave</title>
+    <style>
+        label.error {
+            color: red;
+        }
+        h2 {
+            
+            text-align: center;
+            color: aqua;
+            background: blueviolet;
+        }
+        form {
+            background-color: burlywood;
+           
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h2>Save Teacher</h2>
+    <form method="post" id="TeacherForm" class="col-md-4 col-md-offset-4">
+        @ViewBag.Message
+        <br />
+        <table>
+            <tr>
+                <td>
+                    <label for="Name">Name</label>
+                </td>
+                <td>
+                    <input type="text" id="Name" name="Name" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="Address">Address</label>
+                </td>
+                <td>
+                    <input type="text" id="Address" name="Address" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label for="Email">Email</label>
+                </td>
+                <td>
+                    <input type="text" id="Email" name="Email" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="ContactNo">Contact No</label>
+                </td>
+                <td>
+                    <input type="text" id="ContactNo" name="ContactNo" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="DesignationId">Designation</label>
+                </td>
+                <td>
+                    <select id="DesignationId" name="DesignationId">
+                        <option value="">--Select--</option>
+                        @foreach (Designation designation in designations)
+                        {
+                            <option value="@designation.Id">@designation.DesignationIdentity</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="DepartmentId">Department</label>
+                </td>
+                <td>
+                    <select id="DepartmentId" name="DepartmentId">
+                        <option value="">--Select--</option>
+                        @foreach (Department department in departments)
+                        {
+                            <option value="@department.Id">@department.Code</option>
+                        }
+
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label for="CreditLimit">Credit to be taken</label>
+                </td>
+                <td>
+                    <input type="text" id="CreditLimit" name="CreditLimit" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="submit" value="Save" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+    @section scripts
+    {
+        <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+        <script src="~/Scripts/jquery.validate.js"></script>
+        <script>
+            $(document).ready(function() {
+                $("#TeacherForm").validate({
+                    rules: {
+
+                        Name: "required",
+                        Address: "required",
+                        Email:
+                        {
+                            required: true,
+                            email:true
+                        },
+                        ContactNo: "required",
+                        DesignationId: "required",
+                        DepartmentId: "required",
+                        CreditLimit: {
+                            required: true,
+                            min: 0.0
+
+                        }
+
+                    },
+                    messages: {
+
+                        Name: "Please enter  Name",
+                        //Address: "Please enter  Name",
+                        Email: "Please enter  Email",
+                        ContactNo: "Please enter  Contact Number",
+
+
+                        DesignationId: "Please Select Designation",
+
+                        DepartmentId: "Please Select a Department",
+                        CreditLimit: {
+                            required: "Please enter  Credit To be Taken",
+                            min: "Credit to be taken field must contain a non-negative value"
+
+                        }
+                    }
+                });
+            });
+        </script>
+    }
+</body>
+</html>
+
+

@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "DepartmentSave";
+}
+
+
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Save Department</title>
+    <style>
+        label.error {
+            color: red;
+        }
+        h2 {
+            background-color: blueviolet;
+        }
+        form {
+            background-color: chartreuse;
+        }
+    </style>
+</head>
+<body>
+<h2 class="col-md-4 col-md-offset-4">Save Department</h2>
+    <br/> <br/>
+<div>
+    <form method="POST" id="departmentForm" name="departmentForm" class="col-md-4 col-md-offset-4">
+        @ViewBag.Message
+       
+        <table>
+            <tr>
+                <td>
+                    <label for="Code">Code</label>
+                </td>
+                <td>
+                    <input type="text" id="Code" name="Code" />
+                </td>
+                
+            </tr>
+            
+            <tr>
+                
+                <td>
+                    <label for="DepartmentName">DepartmentName</label>
+                </td>
+                <td>
+                    <input type="text" id="DepartmentName" name="DepartmentName"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Save" />
+                </td>
+            </tr>
+        </table>
+  
+    </form>
+</div>
+    @section scripts
+    {
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>  
+        <script>
+            $(document).ready(function() {
+                $("#departmentForm").validate({
+                    rules: {
+                        //Code: "required",
+                        DepartmentName: "required",
+                        Code: {
+                            required: true,
+                            minlength: 2,
+                            maxlength:7
+                        }
+           
+                    },
+                    messages: {
+                        DepartmentName: "Please enter your Department",
+                
+                        Code: {
+                            required: "Please enter a Department Code",
+                            minlength: "Code must consist of at least 2 characters",
+                            maxlength:"Code must consist of at most 7 characters"
+                        }
+                    }
+                });
+
+            });
+        </script>
+    }
+
+</body>
+</html>
+

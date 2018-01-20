@@ -1,0 +1,169 @@
+﻿@using UniversityProject.Models
+
+@{
+    ViewBag.Title = "AllocateClassRoom";
+}
+
+
+<style>
+    label.error {
+        color: red;
+    }
+    h2 {
+            
+        text-align: center;
+        color: aqua;
+        background: blueviolet;
+    }
+    form {
+        background-color: darkgray;
+    }
+</style>
+<h2>Allocate ClassRoom</h2>
+<form method="post" id="myForm" class="col-md-4 col-md-offset-4">
+
+    @ViewBag.Msg
+    <table>
+        <tr>
+            <td>
+                <label for="departmentId">Department</label>
+            </td>
+            <td>
+                <select name="departmentId" id="departmentId">
+                    <option value="">Select...</option>
+                    @foreach (Department department in ViewBag.Departments)
+                    {
+                        <option value="@department.Id">@department.Code</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="courseId">Course</label></td>
+            <td>
+                <select name="courseId" id="courseId">
+                    <option value="">Select...</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="roomId">Room No.</label>
+            </td>
+            <td>
+                <select name="roomId" id="roomId">
+                    <option value="">Select...</option>
+                    @foreach (var room in ViewBag.Rooms)
+                    {
+                        <option value="@room.Id">@room.RoomNumber</option>
+                    }
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="Day">Day</label>
+            </td>
+            <td>
+                <select name="Day" id="Day">
+                    <option value="">Select...</option>
+
+                    <option value="Sun">Sun</option>
+                    <option value="Mon">Mon</option>
+                    <option value="Tue">Tue</option>
+                    <option value="Wed">Wed</option>
+                    <option value="Thu">Thu</option>
+                    <option value="Fri">Fri</option>
+                    <option value="Sat">Sat</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td><label for="StartTime">From</label></td>
+            <td><input type="text" name="StartTime" id="StartTime" readonly /></td>
+        </tr>
+        <tr>
+            <td><label for="EndTime">To</label></td>
+            <td><input type="text" name="EndTime" id="EndTime" readonly /></td>
+        </tr>
+    </table>
+    <input type="submit" value="Allocate" />
+</form>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.timepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#StartTime').timepicker({
+                timeFormat: 'h:mm p',
+                interval: 15,
+                minTime: '7',
+                maxTime: '10:00pm',
+                defaultTime: '0',
+                startTime: '07:00',
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true
+            });
+            $('#EndTime').timepicker({
+                timeFormat: 'h:mm p',
+                interval: 15,
+                minTime: '7',
+                maxTime: '10:00pm',
+                defaultTime: '0',
+                startTime: '07:00',
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true
+            });
+            $("#myForm").validate({
+                rules: {
+                    departmentId: "required",
+                    courseId: "required",
+                    roomId: "required",
+                    Day: "required",
+                    StartTime: "required",
+                    EndTime: "required"
+                },
+                messages: {
+                    departmentId: "Please Select Department",
+
+                    courseId: "Please Select Course",
+                    ContactNo: "Please Enter Mobile Number ",
+                    roomId: "Please Select Room",
+                    Day: "Please Select Day",
+                    StartTime: "Please Pick Time",
+                    EndTime: "Please Pick Time"
+                }
+            });
+            $("#departmentId").change(function () {
+                $("#courseId").empty();
+                var deptId = $("#departmentId").val();
+                
+                var json = { departmentId: deptId };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetCourseByDptId", "University")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                        //alert(data);
+                        $("#courseId").append('<option value=>' + 'Select' + '</option>');
+                        $.each(data, function (key, value) {
+                            //alert(key);
+                            $("#courseId").append('<option value=' + value.Id + '>' + value.CourseName + '</option>');
+
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

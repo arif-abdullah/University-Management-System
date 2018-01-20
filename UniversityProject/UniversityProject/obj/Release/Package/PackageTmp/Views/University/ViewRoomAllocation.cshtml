@@ -1,0 +1,107 @@
+﻿@using UniversityProject.Models
+
+@{
+    ViewBag.Title = "ViewRoomAllocation";
+}
+
+<style>
+    h2 {
+            
+        text-align: center;
+        color: aqua;
+        background: blueviolet;
+    }
+    
+    th {
+        color: black;
+        background:  brown;
+    }
+    td {
+        background-color: burlywood;
+    }
+</style>
+<h2>View Class Schedule and Room Allocation Information</h2>
+
+
+<form >
+    <table>
+        <tr>
+            <td>
+                <label for="departmentId">Select Department</label>
+            </td>
+            <td>
+                <select name="departmentId" id="departmentId">
+
+                    <option value="">Select...</option>
+                    @foreach (var department in ViewBag.Departments)
+                    {
+                        <option value="@department.Id">@department.DepartmentName</option>
+                    }
+                </select>
+            </td>
+        </tr>
+
+    </table>
+    <table class="table table-hover table-bordered" id="table" name="table">
+        <thead>
+            <tr>
+                <th>Course Code</th>
+                <th>Course Name</th>
+                <th>Schedule Info</th>
+
+            </tr>
+
+        </thead>
+        <tbody></tbody>
+
+    </table>
+
+</form>
+
+@section scripts
+{
+
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+
+            $("#departmentId").change(function () {
+                $('#table tbody').empty();
+                var deptId = $("#departmentId").val();
+
+                var json = { departmentId: deptId };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ViewRoomAllocationByDeptId", "University")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                       
+                        var rows = "";
+                        $.each(data, function (key, value) {
+                            $('#table tbody').empty();
+                            
+                            rows += "<tr>"
+                                + "<td>" + value.CourseCode + "</td>"
+                                + "<td>" + value.CourseName + "</td>"
+                                + "<td>" + value.ScheduleInfo+ "</td>"
+                                +"</tr>";
+                            $('#table tbody').append(rows);
+                        });
+
+                    }
+
+                });
+            });
+
+        });
+
+    </script>
+}
+
+
+
+

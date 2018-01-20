@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/reset.css" rel="stylesheet"/>
+    <link href="~/Content/jquery-ui.css" rel="stylesheet"/>
+    <link href="~/Content/jquery.timepicker.min.css" rel="stylesheet"/>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+</head>
+<body style="background-color: aqua">
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../University/Index">Uinversty Management</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="../University/Index">Home</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Departments <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="../University/DepartmentSave">Save Departments</a></li>
+                    <li><a href="../University/ViewDepartments">View Departments</a></li>
+                    
+                </ul>
+            </li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Courses <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="../University/CourseSave">Save Courses</a></li>
+                    <li><a href="../University/ViewCourseStatics">View Course Statics</a></li>
+                    <li><a href="../University/UnassignCourses">UnAssign AllCoureses</a></li>
+                </ul>
+            </li>
+            
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Teachers <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="../University/TeachersSave">Save Teacher</a></li>
+                    <li><a href="../University/CourseAssignToTeacher">Course Assign To Teacher</a></li>
+                   
+                </ul>
+            </li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Students<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="../University/SaveStudent">Register Student</a></li>
+                    <li><a href="../University/EnrollCourse">Enroll In a Course</a></li>
+                    <li><a href="../University/StudentResult">Save Student Result</a></li>
+                    <li><a href="../University/ViewResult">View Result</a></li>
+                </ul>
+            </li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">ClassRoom<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="../University/AllocateClassRoom">Allocate Classrooms</a></li>
+                    <li><a href="../University/ViewRoomAllocation">View Class Schedule and Room Allocation</a></li>
+                    <li><a href="../University/UnallocateRooms">Unallocate All ClassRooms</a></li>
+                    
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer class="navbar navbar-fixed-bottom col-md-4 col-md-offset-4">
+            <p>&copy;  Copyright @DateTime.Now.Year All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

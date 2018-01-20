@@ -1,0 +1,121 @@
+﻿@using UniversityProject.Models
+@model IEnumerable<ViewCourseStatics>
+
+@{
+    ViewBag.Title = "View Course Assign to Teacher";
+
+}
+<style>
+    h2 {
+            
+        text-align: center;
+        color: aqua;
+        background: blueviolet;
+    }
+
+    th {
+        color: black;
+        background:  brown;
+    }
+    td {
+        background-color: burlywood;
+    }
+</style>
+<h2>View Course Assign to Teacher</h2>
+
+<form method="POST" id="myForm">
+   
+    <table>
+        <tr>
+            <td>
+                <label for="departmentId">Select Department</label>
+            </td>
+            <td>
+                <select name="departmentId" id="departmentId">
+                    //<option value="">Select...</option>
+                    @foreach (var department in ViewBag.Departments)
+                    {
+                        <option value="@department.Id">@department.DepartmentName</option>
+                    }
+                </select>
+            </td>
+        </tr>
+           
+    </table>
+    
+    <table class="table table-hover table-bordered" id="table" name="table">
+        <thead>
+        <tr>
+            <th>Code</th>
+            <th>Course Name</th>
+            <th>Semester</th>
+            <th>Assign To</th>
+        </tr>
+     
+        </thead>
+        <tbody>
+             @*@foreach (var view in Model)
+             {
+                 <tr>
+                     <td>@view.CourseCode</td>
+                     <td>@view.CourseName</td>
+                     <td>@view.Semester</td>
+                     <td>@view.AssignTo</td>
+                 </tr>
+             }*@
+        
+        </tbody>
+     
+    </table>
+</form>
+
+@section scripts
+{
+
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#departmentId").change(function () {
+                $('#table tbody').empty();
+                var deptId = $("#departmentId").val();
+               
+                var json = { departmentId: deptId };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ViewCourseStatics", "University")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                        //alert(data);
+                        var rows = "";
+                        $.each(data, function (key, value) {
+                            //alert(key);
+                            $('#table tbody').empty();
+                           
+                               rows += "<tr>"
+                                + "<td>" + value.CourseCode + "</td>"
+                                + "<td>" + value.CourseName + "</td>"
+                                + "<td>" + value.Semester  + "</td>"
+                                + "<td>" + value.AssignTo + "</td>" +
+                                "</tr>";
+                               $('#table tbody').append(rows);
+                        });
+                  
+                    }
+
+                });
+            });
+
+            });
+
+    </script>
+
+
+}
+
+

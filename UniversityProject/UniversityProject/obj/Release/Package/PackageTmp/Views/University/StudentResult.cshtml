@@ -1,0 +1,161 @@
+﻿@using UniversityProject.Models
+
+@{
+    ViewBag.Title = "StudentResult";
+}
+
+
+<style>
+    label.error {
+        color: red;
+    }
+    h2 {
+            
+        text-align: center;
+        color: aqua;
+        background: blueviolet;
+    }
+    form {
+        background-color: lightseagreen;
+    }
+</style>
+<h2>Save Student Result</h2>
+<form method="POST" id="myForm" class="col-md-4 col-md-offset-4">
+    @ViewBag.Messages
+    <table>
+        <tr>
+            <td>
+                <label for="studentId">Student Reg. No.</label>
+            </td>
+            <td>
+                <select name="studentId" id="studentId">
+                    <option value="">Select...</option>
+                    @foreach (Student student in ViewBag.Students)
+                    {
+                        <option value="@student.Id">@student.RegistrationNumber</option>
+                    }
+                </select>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td><label for="Name">Name</label></td>
+            <td>
+                <input type="text" id="Name" name="Name" readonly value="" />
+            </td>
+        </tr>
+
+        <tr>
+            <td><label for="Email">Email</label></td>
+            <td>
+                <input type="text" id="Email" name="Email" readonly value="" />
+            </td>
+        </tr>
+        <tr>
+            <td><label for="Department">Department</label></td>
+            <td>
+                <input type="text" id="Department" name="Department" readonly value="" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="CourseCodeId">Select Course</label>
+            </td>
+            <td>
+                <select name="CourseCodeId" id="CourseCodeId">
+                    <option value="">Select...</option>
+
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Grade">Select Grade letter</label>
+            </td>
+            <td>
+                <select name="Grade" id="Grade">
+                    <option value="">Select...</option>
+                    <option value="A+">A+</option>
+                    <option value="A">A</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B">B</option>
+                    <option value="B-">B-</option>
+                    <option value="C+">C+</option>
+                    <option value="C">C</option>
+                    <option value="C-">C-</option>
+                    <option value="D+">D+</option>
+                    <option value="D">D</option>
+                    <option value="D-">D-</option>
+                    <option value="F">F</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+
+            <td><input type="submit" value="Save" class="btn btn-default" /></td>
+        </tr>
+    </table>
+</form>
+
+@section scripts
+{
+
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#EnrollmentDate").datepicker();
+            $("#myForm").validate({
+                rules: {
+                    studentId: "required",
+                    CourseCodeId: "required",
+
+                    Grade: "required"
+
+                },
+                messages: {
+                    studentId: "Please Select Student Reg. no",
+
+                    CourseCodeId: "Please Select Course",
+
+                    Grade: "Please Select Grade Letter"
+
+                }
+            });
+            $("#studentId").change(function () {
+
+                var stdId = $("#studentId").val();
+                $("#CourseCodeId").empty();
+                $('#Name').val('');
+                $('#Email').val('');
+                $('#Department').val('');
+                var json = { studentId: stdId };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetStudentsEnrollById", "University")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                        //alert(data);
+                        $("#CourseCodeId").append('<option value=' + "" + ' >' + "Select" + '</option>');
+                        $.each(data, function (key, value) {
+                            //alert(key);
+                            $('#Name').val(value.Name);
+                            $("#Email").val(value.Email);
+                            $("#Department").val(value.Department);
+                            $("#CourseCodeId").append('<option value=' + value.CourseCodeId + '>' + value.CourseCode + '</option>');
+
+                        });
+                    }
+                });
+            });
+
+        });
+
+    </script>
+}
+

@@ -1,0 +1,169 @@
+﻿@using UniversityProject.Models
+@model IEnumerable<Student>
+@{
+    ViewBag.Title = "SaveStudent";
+   
+}
+
+
+
+<style>
+    label.error {
+        color: red;
+    }
+    h2 {
+            
+        text-align: center;
+        color: aqua;
+        background: blueviolet;
+    }
+
+    form {
+        background-color: darksalmon;
+    }
+    th {
+        color: black;
+        background:  brown;
+    }
+    td {
+        background-color: burlywood;
+    }
+</style>
+<h2>Register Student</h2>
+<form method="post" id="studentForm" class="col-md-4 col-md-offset-4">
+    @ViewBag.Messages
+    <br />
+    <table>
+        <tr>
+            <td><label for="Name">Name</label></td>
+            <td><input type="text" name="Name" id="Name" /></td>
+        </tr>
+        <tr>
+            <td><label for="Email">Email</label></td>
+            <td><input type="text" name="Email" id="Email" /></td>
+        </tr>
+        <tr>
+            <td><label for="ContactNo">Contact No</label></td>
+            <td><input type="text" name="ContactNo" id="ContactNo" /></td>
+        </tr>
+        <tr>
+            <td><label for="RegistrationDate">Registration Date</label></td>
+            <td><input type="text" name="RegistrationDate" id="RegistrationDate" /></td>
+        </tr>
+
+        <tr>
+            <td><label for="Address">Address </label></td>
+            <td><textarea name="Address" id="Address"></textarea></td>
+        </tr>
+        <tr>
+            <td><label for="DepartmentId">Department </label></td>
+            <td>
+                <select name="DepartmentId" id="DepartmentId">
+                    <option value="">Select</option>
+                    @foreach (Department aDepartment in ViewBag.Departments)
+                    {
+                        <option value="@aDepartment.Id">@aDepartment.Code</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+
+            <td><input type="text" name="RegistrationNumber" id="RegistrationNumber" hidden /></td>
+        </tr>
+        <tr>
+
+            <td><input type="submit" value="Register" /></td>
+        </tr>
+    </table>
+    
+   
+</form>
+
+
+<table class="table table-hover table-bordered" id="table" name="table">
+  
+
+    @if (Model==null)
+    {
+       
+        <tbody>
+          
+        </tbody>
+    }
+    else
+    {
+        <thead>
+
+        <tr>
+            <th>Regirstration Number</th>
+            <th>Name</th>
+            <th>Email </th>
+            <th>Contact No</th>
+            <th>Registration Date</th>
+            <th>Address</th>
+            <th>Department</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        @foreach (Student student in Model)
+        {
+            <tr>
+                <td>@student.RegistrationNumber</td>
+                <td>@student.Name</td>
+                <td>@student.Email</td>
+                <td>@student.ContactNo</td>
+                <td>@student.RegistrationDate.ToString("yyyy/MM/dd")</td>
+                <td>@student.Address</td>
+                <td>@student.DepartmentName</td>
+            </tr>
+        }
+
+        </tbody>
+    }
+
+
+</table>
+@section scripts{
+     
+
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    
+<script src="~/Scripts/jquery-ui.js"></script>
+
+    
+    <script>
+    $(document).ready(function () {
+        //code for date picker
+                $( "#RegistrationDate" ).datepicker();
+ 
+            // validate signup form on keyup and submit
+            $("#studentForm").validate({
+                rules: {
+                    Name: "required",
+                
+
+                    Email: {
+                        required: true,
+                        email: true
+                    },
+                    ContactNo: "required",
+                    RegistrationDate: "required",
+                    DepartmentId: "required"
+
+                },
+                messages: {
+                    Name: "Please enter your Name",
+
+                    Email: "Please enter a valid email address",
+                    ContactNo: "Please Enter Mobile Number ",
+                    RegistrationDate: "Please pick date",
+                    DepartmentId: "Please Select Department Id"
+                }
+            });
+
+        });
+    </script>
+}

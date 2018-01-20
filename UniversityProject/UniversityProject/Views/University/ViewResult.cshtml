@@ -1,0 +1,177 @@
+﻿@using UniversityProject.Models
+
+
+@{
+    ViewBag.Title = "ViewResult";
+}
+<style>
+    h2 {
+            
+        text-align: center;
+        color: aqua;
+        background: blueviolet;
+    }
+    form {
+        background-color: coral;
+    }
+    th {
+        color: black;
+        background:  brown;
+    }
+    td {
+        background-color: burlywood;
+    }
+</style>
+<h2>View Student Result</h2>
+
+<form action="/University/CreatePdf" id=" myform" class="col-md-4 col-md-offset-4">
+    @ViewBag.Messages
+    <table>
+        <tr>
+            <td>
+                <label for="studentId">Student Reg. No.</label>
+            </td>
+            <td>
+                <select name="studentId" id="studentId">
+                    <option value="">Select...</option>
+                    @foreach (Student student in ViewBag.Students)
+                    {
+                        <option value="@student.Id">@student.RegistrationNumber</option>
+                    }
+                </select>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td><label for="Name">Name</label></td>
+            <td>
+                <input type="text" id="Name" name="Name" readonly value="" />
+            </td>
+        </tr>
+
+        <tr>
+            <td><label for="Email">Email</label></td>
+            <td>
+                <input type="text" id="Email" name="Email" readonly value="" />
+            </td>
+        </tr>
+        <tr>
+            <td><label for="Code">Department</label></td>
+            <td>
+                <input type="text" id="Code" name="Code" readonly value="" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Make PDF" />
+                @*@Html.ActionLink("Create Pdf", "CreatePdf", "University")*@
+            </td>
+        </tr>
+
+    </table>
+
+
+</form>
+<br />
+<br />
+<table class="table table-hover table-bordered" id="table" name="table">
+    <thead>
+    <tr>
+        <th>
+            Course Code
+        </th>
+        <th>Name</th>
+        <th>Grade</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+@section scripts
+{
+
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>  
+    <script>
+        $(document).ready(function () {
+
+            $("#studentId").change(function () {
+
+                var stdId = $("#studentId").val();
+
+                $('#Name').val('');
+                $('#Email').val('');
+                $('#Code').val('');
+                $('#table tbody').empty();
+                var json = { studentId: stdId };
+
+
+                $.ajax({
+
+                    type: "POST",
+                    url: '@Url.Action("ViewStudentInfoForResult", "University")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                        
+                        //alert(data);
+                        $.each(data, function (key, value) {
+                            //alert(key);
+                            $('#Name').val(value.Name);
+                            $("#Email").val(value.Email);
+                            $("#Code").val(value.DepartmentName);
+
+                        });
+                    }
+                });
+            });
+            $("#studentId").change(function () {
+
+                var stdId = $("#studentId").val();
+               
+                $('#Name').val('');
+                $('#Email').val('');
+                $('#Code').val('');
+                $('#table tbody').empty();
+                var json = { studentId: stdId };
+               
+
+                $.ajax({
+
+                    type: "POST",
+                    url: '@Url.Action("ViewResultByStudentId", "University")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                        var rows = "";
+                        //alert(data);
+                        $.each(data, function (key, value) {
+                            //alert(key);
+                            $('#Name').val(value.Name);
+                            $("#Email").val(value.Email);
+                            $("#Code").val(value.Code);
+                            $('#table tbody').empty();
+
+                            rows += "<tr>"
+                                + "<td>" + value.CourseCode + "</td>"
+                                + "<td>" + value.CourseName + "</td>"
+                                + "<td>" + value.Grade + "</td>"
+                                + "</tr>";
+                            $('#table tbody').append(rows);
+
+                        });
+                    }
+                });
+            });
+
+
+
+        });
+
+    </script>
+}
+
+
+
+

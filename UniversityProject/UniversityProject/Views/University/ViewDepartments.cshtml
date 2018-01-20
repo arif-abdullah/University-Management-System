@@ -1,0 +1,56 @@
+﻿@using UniversityProject.Models
+@model IEnumerable<UniversityProject.Models.Department>
+@{
+    ViewBag.Title = "ViewDepartments";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>View All Departments</title>
+    <style>
+        h2 {
+            
+            text-align: center;
+            color: aqua;
+            background: blueviolet;
+        }
+
+        th {
+            color: black;
+            background:  brown;
+        }
+        td {
+            background-color: burlywood;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <form>
+        <h2 >View All departments</h2>
+        <br/>
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>Code</th>
+                <th>Department Name</th>
+            </tr>
+
+            </thead>
+            @foreach (Department department in Model)
+            {
+                <tr>
+                    <td>@department.Code</td>
+                    <td>@department.DepartmentName</td>
+                </tr>
+            }
+        </table>
+    </form>
+</div>
+</body>
+</html>
+
